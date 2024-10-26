@@ -40,6 +40,11 @@ namespace JocNums
                     MainWindow finestra = new MainWindow(this);
                     finestra.Owner = this;
                     finestra.Show();
+                    if (finestra.grTauler.ESTASOLUCIONAT)
+                    {
+                        MessageBox.Show("Felicitats, has guanyat!", "Victoria!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        finestra.Close();
+                    }
                 }
             }
             catch (FormatException)

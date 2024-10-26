@@ -11,6 +11,7 @@
         <TextBox x:Name="numFiles" DockPanel.Dock="top" Margin="10"/>
         <TextBlock Text="Escriu el num de columnes que vols en el joc (2 - 20)" DockPanel.Dock="Top" Margin="10"/>
         <TextBox x:Name="numColumnes" DockPanel.Dock="top" Margin="10"/>
-        <Button Content="Envia!" Name="btnEnvia" Click="btnEnvia_Click" DockPanel.Dock="Bottom" Margin="40"/>
+        <TextBox Text="No hi ha temps registrat" x:Name="txtTempsFinal" DockPanel.Dock="Bottom" Margin="10" TextAlignment="Center"/>
+        <Button Content="Envia!" Name="btnEnvia" Click="btnEnvia_Click" DockPanel.Dock="Bottom" Margin="10"/>
     </DockPanel>
 </Window>

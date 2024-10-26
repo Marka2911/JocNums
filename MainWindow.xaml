@@ -11,8 +11,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="txtDebug" Grid.Row="0" Text="Hola"/>
+        <TextBlock x:Name="txtCrono" Grid.Row="0" Text="00:00:00"/>
         <local:Tauler x:Name="grTauler" Grid.Row="1" NFILES="3" NCOLUMNES="3"/>
-        
     </Grid>
 </Window>

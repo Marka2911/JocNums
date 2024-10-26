@@ -12,9 +12,18 @@ namespace JocNums
         int NFiles;
         int NColumnes;
         Casella CasellaBuida;
-
+        int NumCasellesBenColocades;
+        bool EstaSolucionat;
+        string finalTime;
+        private MainWindow mainWindow;
         public Tauler()
         {
+
+        }
+        public string FINALTIME
+        {
+            get { return finalTime; }
+            set { finalTime = value; }
         }
 
         public int NFILES
@@ -27,6 +36,13 @@ namespace JocNums
         {
             get { return NColumnes; }
             set { NColumnes = value; }
+        }
+
+        public bool ESTASOLUCIONAT 
+        {
+
+            get { return EstaSolucionat; }
+            set { EstaSolucionat = value; }
         }
 
         Random rnd = new Random();
@@ -71,10 +87,11 @@ namespace JocNums
             return rndNums;
         }
 
-        public void Inicialitza()
+        public void Inicialitza(MainWindow mainWindow)
         {
             RowDefinitions.Clear();
             ColumnDefinitions.Clear();
+            this.mainWindow = mainWindow;
 
             for (int i = 0; i < NFiles; i++)
             {
@@ -99,7 +116,7 @@ namespace JocNums
                             Fila = i,
                             Columna = j,
                             ValorActual = rndNums[idx],
-                            ValorDesitjat = (i * NColumnes + j + 1) % (NFiles * NColumnes)
+                            ValorDesitjat = idx + 1
                         };
 
                         if (casella.ValorActual == 0)
@@ -115,6 +132,15 @@ namespace JocNums
 
                         casella.ActualizarColores();
 
+                        if (casella.EstaBenColocada == true && casella.EsVisible)
+                        {
+                            NumCasellesBenColocades++;
+                        }
+
+                        if (NumCasellesBenColocades == NFiles * NColumnes - 1)
+                        {
+                            EstaSolucionat = true;
+                        }
                         Grid.SetRow(casella, i);
                         Grid.SetColumn(casella, j);
                         Children.Add(casella);
@@ -136,7 +162,7 @@ namespace JocNums
         {
             Casella clickedCasella = (Casella)sender;
 
-            if (IsAdjacent(clickedCasella, CasellaBuida))
+            if (EsBuida(clickedCasella, CasellaBuida))
             {
                 int tempValue = clickedCasella.ValorActual;
                 string tempText = clickedCasella.Text;
@@ -151,26 +177,58 @@ namespace JocNums
 
                 CasellaBuida = clickedCasella;
 
-                // Update colors of all cells to check if they are now correctly placed
-                foreach (UIElement child in Children)
+                NumCasellesBenColocades = 0;
+                foreach (Casella casella in Children)
                 {
-                    if (child is Casella casella)
+                    casella.ActualizarColores();
+                    if (casella.EstaBenColocada == true && casella.EsVisible)
                     {
-                        casella.ActualizarColores();
+                        NumCasellesBenColocades++;
                     }
+                }
+                if (NumCasellesBenColocades == NFiles * NColumnes - 1)
+                {
+                    finalTime = mainWindow.txtCrono.Text;
+                    MessageBox.Show("Felicitats, has guanyat!", "Victoria!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    EstaSolucionat = true;
+                    mainWindow.Tanca();
                 }
             }
         }
 
-        private bool IsAdjacent(Casella clicked, Casella empty)
+        
+
+
+        private bool EsBuida(Casella clicked, Casella empty)
         {
             int clickedRow = clicked.Fila;
             int clickedCol = clicked.Columna;
             int emptyRow = empty.Fila;
             int emptyCol = empty.Columna;
+            bool esBuida = false;
 
-            return (Math.Abs(clickedRow - emptyRow) == 1 && clickedCol == emptyCol) ||
-                   (Math.Abs(clickedCol - emptyCol) == 1 && clickedRow == emptyRow);
+            if (clickedRow - 1 == emptyRow && clickedCol == emptyCol)
+            {
+                esBuida = true;
+            }
+
+            if (clickedRow + 1 == emptyRow && clickedCol == emptyCol)
+            {
+                esBuida = true;
+            }
+
+            if (clickedCol - 1 == emptyCol && clickedRow == emptyRow)
+            {
+                esBuida = true;
+            }
+
+            if (clickedCol + 1 == emptyCol && clickedRow == emptyRow)
+            {
+                esBuida = true;
+            }
+
+            return esBuida;
         }
+
     }
 }
